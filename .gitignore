@@ -1,0 +1,21 @@
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials/
+
+# Local n8n state and database dumps
+.n8n/
+n8n-data/
+*.sqlite
+*.db
+*.sql
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+.vscode/
+
