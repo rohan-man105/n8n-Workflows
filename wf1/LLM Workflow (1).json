@@ -27,7 +27,7 @@
         },
         "simple": false,
         "filters": {
-          "sender": "devilrohan278@gmail.com"
+          "sender": "sender@example.com"
         },
         "options": {}
       },
@@ -41,8 +41,8 @@
       "name": "Gmail Trigger",
       "credentials": {
         "gmailOAuth2": {
-          "id": "E9c8gs7Nqd6dAHgj",
-          "name": "Gmail account"
+          "id": null,
+          "name": "YOUR_GMAIL_CREDENTIAL"
         }
       }
     },
@@ -68,8 +68,7 @@
       "credentials": {
         "openAiApi": {
           "id": null,
-          "name": "",
-          "__aiGatewayManaged": true
+          "name": "YOUR_OPENAI_CREDENTIAL"
         }
       }
     },
@@ -150,8 +149,7 @@
       "credentials": {
         "openAiApi": {
           "id": null,
-          "name": "",
-          "__aiGatewayManaged": true
+          "name": "YOUR_OPENAI_CREDENTIAL"
         }
       }
     },
@@ -177,7 +175,7 @@
     },
     {
       "parameters": {
-        "sendTo": "devilrohan278@gmail.com",
+        "sendTo": "recipient@example.com",
         "subject": "Code summary and Comments",
         "message": "=Summary --> {{ $json.text[0] }}\nCode --> {{ $json.text[1] }}",
         "options": {
@@ -195,8 +193,8 @@
       "webhookId": "b4609cf6-b51c-4889-8e4c-b31e2094f965",
       "credentials": {
         "gmailOAuth2": {
-          "id": "E9c8gs7Nqd6dAHgj",
-          "name": "Gmail account"
+          "id": null,
+          "name": "YOUR_GMAIL_CREDENTIAL"
         }
       }
     },
@@ -267,8 +265,7 @@
       "credentials": {
         "openAiApi": {
           "id": null,
-          "name": "",
-          "__aiGatewayManaged": true
+          "name": "YOUR_OPENAI_CREDENTIAL"
         }
       }
     }

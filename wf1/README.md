@@ -31,10 +31,10 @@ checks Gmail every minute.
 
 1. In n8n, open **Workflows** and select **Import from File**.
 2. Select `LLM Workflow (1).json` from this folder.
-3. Open the **Gmail Trigger** and choose your Gmail OAuth2 credential.
+3. Open the **Gmail Trigger** and replace `YOUR_GMAIL_CREDENTIAL` with your Gmail OAuth2 credential.
 4. Open **Send a message** and choose the same (or another) Gmail OAuth2
    credential.
-5. Open each **OpenAI Chat Model** node and choose your OpenAI credential.
+5. Open each **OpenAI Chat Model** node and replace `YOUR_OPENAI_CREDENTIAL` with your OpenAI credential.
 6. Replace the trigger's sender filter and the email recipient with addresses
    appropriate for your setup.
 7. Send a test email containing code in the message text, test the workflow,
@@ -42,8 +42,9 @@ checks Gmail every minute.
 
 ## Security and sharing
 
-The JSON references credentials by name/type; it should not contain the secret
-values themselves. Nevertheless, it includes email addresses and all prompts,
+The JSON uses credential placeholders (`YOUR_GMAIL_CREDENTIAL` and
+`YOUR_OPENAI_CREDENTIAL`), not real credentials or secret values. Nevertheless,
+it includes email addresses and all prompts,
 so keep this project private unless you first replace personal addresses with
 placeholders such as `sender@example.com` and `recipient@example.com`.
 
