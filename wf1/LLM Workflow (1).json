@@ -1,0 +1,407 @@
+{
+  "name": "LLM Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Workflow\n\n### Steps\n1. Read the code related mail --> trigger\n2. Generate summary of the whole code.\n3. Generate comments for the code.\n4. Step 2 & 3 to be done in parallel.\n5. Merge the outputs of step 2 & 3.\n6. Send the output to me as mail\n",
+        "height": 240,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -832,
+        272
+      ],
+      "typeVersion": 1,
+      "id": "e4685ee8-d5f4-4062-b0e6-7342720822c7",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {
+          "sender": "devilrohan278@gmail.com"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -416,
+        256
+      ],
+      "id": "2af13e00-cdb7-479c-bd13-03a53b321580",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "E9c8gs7Nqd6dAHgj",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -112,
+        240
+      ],
+      "id": "31dcccfa-0dc3-4a77-8a52-d3675b48b81b",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        160,
+        256
+      ],
+      "id": "00d60dc2-bfb7-4368-b247-ff367d2f71bf",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Summarise the code in a simple way -->  {{ $json.text }}\n\nNOTE: Do not edit the original code lines.",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a helpful assistant and know how to write code in python . You can help me to understand the code by summarising it for me."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -128,
+        64
+      ],
+      "id": "1eeee435-194b-4bae-8428-694bca4bffbb",
+      "name": "Summariser"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Generate comments for the code so that i can understand the code -->  {{ $json.text }}\n\nNOTE: Do not edit the original code lines.",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a helpful assistant and know how to write code in python . You can help me to understand the code by generating comments for me."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -192,
+        464
+      ],
+      "id": "f99a5e8a-75c5-4972-91c2-9a793c1dd1f6",
+      "name": "Commentor"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -128,
+        704
+      ],
+      "id": "e5760ffa-eee1-4494-bd27-73d85923fec4",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "text"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        384,
+        256
+      ],
+      "id": "4806a615-5928-4a12-88e7-cf84d6aeb177",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "sendTo": "devilrohan278@gmail.com",
+        "subject": "Code summary and Comments",
+        "message": "=Summary --> {{ $json.text[0] }}\nCode --> {{ $json.text[1] }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1184,
+        256
+      ],
+      "id": "fa6a3e32-29c7-44dd-91d5-354cc98f78d6",
+      "name": "Send a message",
+      "webhookId": "b4609cf6-b51c-4889-8e4c-b31e2094f965",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "E9c8gs7Nqd6dAHgj",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1f11ccd4-15fa-4b23-b5ac-08232d233000",
+              "name": "text",
+              "value": "=Summary -  {{ $json.text[0] }}\n\n\nCode with comments - {{ $json.text[1] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        608,
+        256
+      ],
+      "id": "84531582-6450-4129-a419-a4237d39c795",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You convert the input message into html format with proper gap in code blocks and also synactically highlight according to coding language\n\nInput message -->  {{ $json.text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a helpful assistant that can convert any message into html format to send it to on mail to a user."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        832,
+        256
+      ],
+      "id": "d5d3c996-4e19-4238-88bf-ba22b9871d7f",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        912,
+        496
+      ],
+      "id": "54158f53-19c3-4666-95e1-f30d142e5215",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Summariser",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Commentor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Summariser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summariser": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Commentor": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Commentor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f5879bc0-1a39-47d1-90f8-088f4b00295d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a006ee7a95bc550b677e8497ba8347983f167de5f814678f2448554c5a53434f"
+  },
+  "nodeGroups": [],
+  "id": "WMn1uJJCvzrL0mwr",
+  "tags": []
+}
