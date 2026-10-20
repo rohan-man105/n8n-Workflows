@@ -1,0 +1,659 @@
+{
+  "name": "AgentWorkflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "8d87a61c-e893-476c-9ab5-a00c6e9e183d",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        -2384,
+        -784
+      ],
+      "id": "d89627f9-ded6-4def-84b6-146c43c657cd",
+      "name": "Webhook",
+      "webhookId": "8d87a61c-e893-476c-9ab5-a00c6e9e183d"
+    },
+    {
+      "parameters": {
+        "content": "## Workflow\n\nAn agent for everyday tasks and reminders with streamlit powered UI.\n",
+        "height": 96,
+        "width": 384
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2880,
+        -848
+      ],
+      "typeVersion": 1,
+      "id": "cceb4b4f-578a-4fd2-9edf-f0e1b7e7eb2d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=The user query is - \n{{ $json.body.message }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -2128,
+        -816
+      ],
+      "id": "85fca135-194d-4665-a3f9-cec0e3543ec1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -2512,
+        -576
+      ],
+      "id": "ac0e8805-252d-4c10-983e-149a96b20fca",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "ADD YOUR CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "session1",
+        "contextWindowLength": 7
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -2400,
+        -576
+      ],
+      "id": "a3878300-1e75-40cb-8966-6d01f38a433f",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -1696,
+        -784
+      ],
+      "id": "f3ef0551-66e1-42b0-b54f-1de9cbd13b5b",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "content": "## Capabilities \n1. Web search\n2. Calendar\n3. Gmail access\n4. Notes Creation\n5. Task creation and deletion\n",
+        "height": 192,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2880,
+        -736
+      ],
+      "typeVersion": 1,
+      "id": "c882f8cc-3445-471a-82e3-7495f03d8e86",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Web Search\n",
+        "height": 192,
+        "color": "#B57373"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2880,
+        -464
+      ],
+      "typeVersion": 1,
+      "id": "ceca61b8-1bd8-4162-9958-dee52399a65c",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "q": "={{ $('Webhook').item.json.body.message }}",
+        "locationSettings": {},
+        "languageSettings": {},
+        "searchOptions": {},
+        "timeFilters": {},
+        "pagination": {},
+        "advancedOptions": {},
+        "requestOptions": {}
+      },
+      "type": "@searchapi/n8n-nodes-searchapi.searchApiTool",
+      "typeVersion": 1,
+      "position": [
+        -2816,
+        -400
+      ],
+      "id": "82ca7b83-59d6-4f41-a12f-5d84bcbd83d5",
+      "name": "Google Search",
+      "credentials": {
+        "searchApi": {
+          "id": null,
+          "name": "ADD YOUR CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Calender",
+        "height": 192,
+        "width": 352,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2592,
+        -464
+      ],
+      "typeVersion": 1,
+      "id": "6af917e5-006a-4e28-87d4-49b014b290aa",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "195823a1fc5750d72f2983a2fd1f3a86f6b33fce5a55b227cb91603f44027227@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Agent"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "useDefaultReminders": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Use_Default_Reminders', ``, 'boolean') }}",
+        "additionalFields": {
+          "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        -2576,
+        -416
+      ],
+      "id": "b5f15fa7-eb49-441c-ac48-e3c8f85438c7",
+      "name": "Create Event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": null,
+          "name": "ADD YOUR CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "calendar": {
+          "__rl": true,
+          "value": "195823a1fc5750d72f2983a2fd1f3a86f6b33fce5a55b227cb91603f44027227@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Agent"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        -2352,
+        -416
+      ],
+      "id": "bc051b95-544b-4fd2-9494-b1df42746c6a",
+      "name": "Retreive Event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": null,
+          "name": "ADD YOUR CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "195823a1fc5750d72f2983a2fd1f3a86f6b33fce5a55b227cb91603f44027227@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Agent"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        -2464,
+        -416
+      ],
+      "id": "5e047184-45be-4ac4-abe6-273f69cd8e54",
+      "name": "Get Events",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": null,
+          "name": "ADD YOUR CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Gmail\n",
+        "height": 224,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2208,
+        -480
+      ],
+      "typeVersion": 1,
+      "id": "dba3b310-821e-4570-9a60-7a00a343608f",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_ID', ``, 'string') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        -2192,
+        -416
+      ],
+      "id": "3677edff-bac2-458f-a1bb-5bcfad0cdba0",
+      "name": "Get message",
+      "webhookId": "e79d0cf8-e4dd-40b4-948b-1c139c5a7527",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": null,
+          "name": "ADD YOUR CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        -2080,
+        -416
+      ],
+      "id": "39650ab5-45ef-420d-bd9b-cc209d92c659",
+      "name": "Send message",
+      "webhookId": "86b64ae9-b057-4968-ac38-a6a9860c1d56",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": null,
+          "name": "ADD YOUR CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1968,
+        -416
+      ],
+      "id": "6b9570eb-ff69-4705-b510-8dcd81896db2",
+      "name": "Get Messages",
+      "webhookId": "6df85368-da18-4c9d-8ac7-1a4e7dd793a2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": null,
+          "name": "ADD YOUR CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "driveId": "=myDrive",
+        "folderId": "default",
+        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        -1760,
+        -432
+      ],
+      "id": "8c9cbcd7-981e-4654-84cc-7a7e87c9dc3c",
+      "name": "Create Notes",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": null,
+          "name": "ADD YOUR CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Notes ",
+        "height": 224,
+        "width": 384,
+        "color": "#289A83"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1792,
+        -480
+      ],
+      "typeVersion": 1,
+      "id": "a3f05865-06fc-47e4-9cdd-b43c263ad057",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Doc_ID_or_URL', ``, 'string') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('actionFields0_Old_Text', ``, 'string') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        -1632,
+        -432
+      ],
+      "id": "6f948401-b519-42cc-b7d2-39f487a8da8d",
+      "name": "Update Notes",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": null,
+          "name": "ADD YOUR CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Doc_ID_or_URL', ``, 'string') }}",
+        "simple": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Simplify', ``, 'boolean') }}"
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        -1504,
+        -432
+      ],
+      "id": "fd917a50-fe76-4f43-9259-32a52c4114f4",
+      "name": "Get Notes",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": null,
+          "name": "ADD YOUR CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Setup required\\n\\nAdd your credentials to each integration node before activating this workflow.",
+        "height": 112,
+        "width": 480,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2880,
+        -1056
+      ],
+      "id": "setup-credentials-note",
+      "name": "Add Your Credentials"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "rohan-man.app.n8n.cloud",
+            "user-agent": "python-requests/2.34.2",
+            "content-length": "58",
+            "accept": "*/*",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "117.236.118.254",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "IN",
+            "cf-ray": "a4d709af6d837b2f-BOM",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "x-forwarded-for": "117.236.118.254, 172.71.198.136",
+            "x-forwarded-host": "rohan-man.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-26-59cd5b855d-pdtn9",
+            "x-is-trusted": "yes",
+            "x-real-ip": "117.236.118.254"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "message": "can you summarise the most recent mail that i received."
+          },
+          "webhookUrl": "https://rohan-man.app.n8n.cloud/webhook-test/8d87a61c-e893-476c-9ab5-a00c6e9e183d",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Event": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retreive Event": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Events": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get message": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Messages": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Notes": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Notes": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Notes": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "8ae37f0a-5661-4b53-bb99-67f1dd0b67d2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a006ee7a95bc550b677e8497ba8347983f167de5f814678f2448554c5a53434f"
+  },
+  "nodeGroups": [],
+  "id": "Q6vq1DausjvwIWY6",
+  "tags": []
+}
